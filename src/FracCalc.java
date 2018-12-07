@@ -7,12 +7,12 @@ public class FracCalc {
      */
     public static void main(String[] args) 
     {
-		String num = " ";
-		while (!num.equals("quit")) {
+		String q = " ";
+		while (!q.equals("quit")) {
 			Scanner console = new Scanner(System.in);
 			System.out.println("enter a fraction equation. enter 'quit' to end. ");
-			num = console.nextLine();
-			System.out.println(produceAnswer(num));
+			q = console.nextLine();
+			System.out.println(produceAnswer(q));
 		}
 
         // TODO: Read the input from the user and call produceAnswer with an equation
@@ -46,12 +46,65 @@ public class FracCalc {
         // Final project: All answers must be reduced.
         //               Example "4/5 * 1_2/4" returns "1_1/5".
         
-		return operand2;
+		String whole2 = whole(operand2);
+		String num2 = num(operand2);
+		String denom2 = denom(operand2);
+		
+		String chk2 = "whole:" + whole2 + " numerator:" + num2 + " denominator:"  + denom2;
+		
+		return chk2;
 
     }
 
     // TODO: Fill in the space below with helper methods
     
+    // find the whole number
+    public static String whole(String a) {
+    	
+    	// mixed num
+    	if(a.contains("_")) {
+    		return a.substring(0, a.indexOf('_'));
+		
+		// just fraction
+    	} else if (a.contains("/")) {
+    		return "0";
+		
+		// just whole
+    	} else {
+    		return a;
+    	}
+    }
+    
+    // find the numerator
+    public static String num(String a) {
+    	
+    	// mixed num
+    	if(a.contains("_")) {
+    		return a.substring(a.indexOf('_') + 1, a.indexOf('/'));
+    		
+		// just fraction
+    	} else if (a.contains("/")) {
+    		return a.substring(0, a.indexOf('/')) ;
+		
+		// just whole
+    	} else {
+    		return "0";
+    	}
+    }
+    
+    // find the denominator
+    public static String denom(String a) {
+
+		// fraction or mixed num
+    	if (a.contains("/")) {
+    		return a.substring(a.indexOf('/') + 1) ;
+		
+		// just whole
+    	} else {
+    		return "1";
+    	}
+    }
+
     /**
      * greatestCommonDivisor - Find the largest integer that evenly divides two integers.
      *      Use this helper method in the Final Checkpoint to reduce fractions.
@@ -60,6 +113,7 @@ public class FracCalc {
      * @param b - Second integer.
      * @return The GCD.
      */
+
     public static int greatestCommonDivisor(int a, int b)
     {
         a = Math.abs(a);
@@ -81,6 +135,7 @@ public class FracCalc {
      * @param b - Second integer.
      * @return The LCM.
      */
+    
     public static int leastCommonMultiple(int a, int b)
     {
         int gcd = greatestCommonDivisor(a, b);
