@@ -69,31 +69,32 @@ public class FracCalc {
 
 	public static void parseFraction(String operand, Boolean operand1) {
 		String fraction = operand;
-		String wholenumber = "0";
-		String numerator = "0";
-		String denominator = "0";
-		String[] splitwholenumber = fraction.split("_");
-		if (splitwholenumber.length == 2) {
+		String whole = "0";
+		String num = "0";
+		String denom = "0";
+		String[] splitwhole = fraction.split("_");
+		if (splitwhole.length == 2) {
 			// Mixed Fraction Condition
-			wholenumber = fraction.split("_")[0];
-			numerator = fraction.split("_")[1].split("/")[0];
-			denominator = fraction.split("_")[1].split("/")[1];
+			whole = fraction.split("_")[0];
+			num = fraction.split("_")[1].split("/")[0];
+			denom = fraction.split("_")[1].split("/")[1];
 		} else {
 			// Check if it's whole number only
-			String[] splitnumeratoranddenominator = fraction.split("/");
+			String[] splitnumdenom = fraction.split("/");
 			// If there are 2 values in array, this means it's a fraction else it's only a
 			// whole number
-			if (splitnumeratoranddenominator.length == 2) {
-				numerator = splitnumeratoranddenominator[0];
-				denominator = splitnumeratoranddenominator[1];
+			if (splitnumdenom.length == 2) {
+				num = splitnumdenom[0];
+				denom = splitnumdenom[1];
 			} else {
-				wholenumber = operand;
-				denominator = "1";
+				whole = operand;
+				denom = "1";
 			}
 		}
+		
 		// Set Static Variables
-		SetStaticFieldValues(operand1, Integer.parseInt(wholenumber), Integer.parseInt(numerator),
-				Integer.parseInt(denominator));
+		SetStaticFieldValues(operand1, Integer.parseInt(whole), Integer.parseInt(num),
+				Integer.parseInt(denom));
 	}
 
 	public static void SetStaticFieldValues(Boolean operand1, int wholenumber, int numerator, int denominator) {
