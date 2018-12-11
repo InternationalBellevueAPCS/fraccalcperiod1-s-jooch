@@ -175,21 +175,21 @@ public class FracCalc {
 
 	// Calculations
 	public static String Add() {
-		int tempnumerator = 0;
-		int commondenominator = 0;
+		int tempnum = 0;
+		int commondenom = 0;
 		if (FracCalc.operand1Denom == FracCalc.operand2Denom) {
 			// Call Calculate Numerator based on operator
-			tempnumerator = FracCalc.operand1ImpNum + FracCalc.operand2ImpNum;
+			tempnum = FracCalc.operand1ImpNum + FracCalc.operand2ImpNum;
 			// Since the denominator are the same let's just use Operand1 denom
-			SetResult(tempnumerator, FracCalc.operand1Denom);
+			SetResult(tempnum, FracCalc.operand1Denom);
 		} else {
-			commondenominator = FracCalc.operand1Denom * FracCalc.operand2Denom;
+			commondenom = FracCalc.operand1Denom * FracCalc.operand2Denom;
 			FracCalc.operand1ImpNum = FracCalc.operand1ImpNum
-					* (commondenominator / FracCalc.operand1Denom);
+					* (commondenom / FracCalc.operand1Denom);
 			FracCalc.operand2ImpNum = FracCalc.operand2ImpNum
-					* (commondenominator / FracCalc.operand2Denom);
-			tempnumerator = FracCalc.operand1ImpNum + FracCalc.operand2ImpNum;
-			SetResult(tempnumerator, commondenominator);
+					* (commondenom / FracCalc.operand2Denom);
+			tempnum = FracCalc.operand1ImpNum + FracCalc.operand2ImpNum;
+			SetResult(tempnum, commondenom);
 		}
 		return FracCalc.finalresult;
 	}
@@ -204,28 +204,28 @@ public class FracCalc {
 	}
 
 	public static String Subract() {
-		int tempnumerator = 0;
-		int commondenominator = 0;
+		int tempnum = 0;
+		int commondenom = 0;
 		if (FracCalc.operand1Denom == FracCalc.operand2Denom) {
 			// Call Calculate Numerator based on operator
-			tempnumerator = FracCalc.operand1ImpNum - FracCalc.operand2ImpNum;
+			tempnum = FracCalc.operand1ImpNum - FracCalc.operand2ImpNum;
 			// Since the denominator are the same let's just use Operand1 denom
-			SetResult(tempnumerator, FracCalc.operand1Denom);
+			SetResult(tempnum, FracCalc.operand1Denom);
 		} else {
-			commondenominator = FracCalc.operand1Denom * FracCalc.operand2Denom;
+			commondenom = FracCalc.operand1Denom * FracCalc.operand2Denom;
 			FracCalc.operand1ImpNum = FracCalc.operand1ImpNum
-					* (commondenominator / FracCalc.operand1Denom);
+					* (commondenom / FracCalc.operand1Denom);
 			FracCalc.operand2ImpNum = FracCalc.operand2ImpNum
-					* (commondenominator / FracCalc.operand2Denom);
-			tempnumerator = FracCalc.operand1ImpNum - FracCalc.operand2ImpNum;
-			SetResult(tempnumerator, commondenominator);
+					* (commondenom / FracCalc.operand2Denom);
+			tempnum = FracCalc.operand1ImpNum - FracCalc.operand2ImpNum;
+			SetResult(tempnum, commondenom);
 		}
 		return FracCalc.finalresult;
 	}
 
 	public static String Divide() {
-		int tempnumerator = 0;
-		int tempdenominator = 0;
+		int tempnum = 0;
+		int tempdenom = 0;
 		// Invert reciprocal of Operand 2
 		// Again Check to see if the remainder is negative
 		if (FracCalc.operand2ImpNum < 0) {
@@ -234,16 +234,16 @@ public class FracCalc {
 			int tempvalue = FracCalc.operand2Denom;
 			FracCalc.operand2Denom = FracCalc.operand2ImpNum;
 			FracCalc.operand2ImpNum = tempvalue;
-			tempnumerator = (FracCalc.operand1ImpNum * -1) * FracCalc.operand2ImpNum;
-			tempdenominator = FracCalc.operand1Denom * FracCalc.operand2Denom;
+			tempnum = (FracCalc.operand1ImpNum * -1) * FracCalc.operand2ImpNum;
+			tempdenom = FracCalc.operand1Denom * FracCalc.operand2Denom;
 		} else {
 			int tempvalue = FracCalc.operand2Denom;
 			FracCalc.operand2Denom = FracCalc.operand2ImpNum;
 			FracCalc.operand2ImpNum = tempvalue;
-			tempnumerator = FracCalc.operand1ImpNum * FracCalc.operand2ImpNum;
-			tempdenominator = FracCalc.operand1Denom * FracCalc.operand2Denom;
+			tempnum = FracCalc.operand1ImpNum * FracCalc.operand2ImpNum;
+			tempdenom = FracCalc.operand1Denom * FracCalc.operand2Denom;
 		}
-		SetResult(tempnumerator, tempdenominator);
+		SetResult(tempnum, tempdenom);
 		return FracCalc.finalresult;
 	}
 }
