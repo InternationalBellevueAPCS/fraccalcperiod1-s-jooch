@@ -37,249 +37,117 @@ public class FracCalc {
 		String[] arrayinput = input.split(" ");
 		if (arrayinput.length < 3) {
 			return "ERROR: Input in wrong format.";
-		} else {
-			CalculateEpxression(arrayinput[1], arrayinput[0], arrayinput[2]);
-			for (int i = 3; i < arrayinput.length; i += 2) {
-				CalculateEpxression(arrayinput[i], FracCalc.finalresult, arrayinput[i + 1]);
-			}
-			return FracCalc.finalresult;
 		}
 	}
 
-	public static void CalculateEpxression(String operator, String operand1, String operand2) {
-		FracCalc.parseFraction(operand1, true);
-		FracCalc.parseFraction(operand2, false);
-		FracCalc.operator = operator;
-		if (FracCalc.operand1Denom == 0 || FracCalc.operand2Denom == 0) {
-			FracCalc.finalresult = "ERROR: Cannot divide by zero.";
-		} else {
-			if (operator.equalsIgnoreCase("+")) {
-				FracCalc.Add();
-			} else if (operator.equalsIgnoreCase("*")) {
-				FracCalc.Multiply();
-			} else if (operator.equalsIgnoreCase("-")) {
-				FracCalc.Subract();
-			} else if (operator.equalsIgnoreCase("/")) {
-				FracCalc.Divide();
-			} else if (operator.length() > 1) {
-				FracCalc.finalresult = "ERROR: Input in wrong format.";
-			}
-		}
-	}
-
-	public static void parseFraction(String operand, Boolean operand1) {
-		String fraction = operand;
-		String whole = "0";
-		String num = "0";
-		String denom = "0";
-		String[] splitwhole = fraction.split("_");
-		if (splitwhole.length == 2) {
-			// Mixed Fraction Condition
-			whole = fraction.split("_")[0];
-			num = fraction.split("_")[1].split("/")[0];
-			denom = fraction.split("_")[1].split("/")[1];
-		} else {
-			// Check if it's whole number only
-			String[] splitnumdenom = fraction.split("/");
-			// If there are 2 values in array, this means it's a fraction else it's only a
-			// whole number
-			if (splitnumdenom.length == 2) {
-				num = splitnumdenom[0];
-				denom = splitnumdenom[1];
-			} else {
-				whole = operand;
-				denom = "1";
-			}
-		}
+	public static int convert(String input) {
+		String[] holder = input.split(" ");
+		String operand1 = holder[0];
+		String operation = holder[1];
+		String operand2 = holder[2];
 		
-		// Set Static Variables
-		SetStaticFieldValues(operand1, Integer.parseInt(whole), Integer.parseInt(num),
-				Integer.parseInt(denom));
-	}
+        // TODO: Implement this function to produce the solution to the input
+        // Checkpoint 1: Return the second operand.  Example "4/5 * 1_2/4" returns "1_2/4".
+        // Checkpoint 2: Return the second operand as a string representing each part.
+        //               Example "4/5 * 1_2/4" returns "whole:1 numerator:2 denominator:4".
+        // Checkpoint 3: Evaluate the formula and return the result as a fraction.
+        //               Example "4/5 * 1_2/4" returns "6/5".
+        //               Note: Answer does not need to be reduced, but it must be correct.
+        // Final project: All answers must be reduced.
+        //               Example "4/5 * 1_2/4" returns "1_1/5".
+        
+		String whole2 = whole(operand2);
+		String num2 = num(operand2);
+		String denom2 = denom(operand2);
+		
 
-	public static void SetStaticFieldValues(Boolean operand1, int wholenumber, int numerator, int denominator) {
-		if (operand1) {
-			FracCalc.operand1Whole = wholenumber;
-			FracCalc.operand1Num = numerator;
-			FracCalc.operand1Denom = denominator;
-			if (wholenumber != 0) {
-				// Check if it's negative then do absolute value and add the negative value back
-				if (Integer.toString(wholenumber).contains("-")) {
-					wholenumber = Integer.parseInt(Integer.toString(wholenumber).split("-")[1]);
-					// Convert back to negative
-					FracCalc.operand1ImpNum = ((wholenumber * denominator) + numerator) * (-1);
-				} else {
-					FracCalc.operand1ImpNum = (wholenumber * denominator) + numerator;
-				}
-			} else {
-				FracCalc.operand1ImpNum = numerator;
-			}
+    }
 
-		} else {
-			FracCalc.operand2Whole = wholenumber;
-			FracCalc.operand2Num = numerator;
-			FracCalc.operand2Denom = denominator;
-			if (wholenumber != 0) {
-				// Check if it's negative then do absolute value and add the negative value back
-				if (Integer.toString(wholenumber).contains("-")) {
-					wholenumber = Integer.parseInt(Integer.toString(wholenumber).split("-")[1]);
-					// Convert back to negative
-					FracCalc.operand2ImpNum = ((wholenumber * denominator) + numerator) * (-1);
-				} else {
-					FracCalc.operand2ImpNum = (wholenumber * denominator) + numerator;
-				}
-			} else {
-				FracCalc.operand2ImpNum = numerator;
-			}
-		}
-	}
+// TODO: Fill in the space below with helper methods
+    
+    // find the whole number
+    public static String whole(String a) {
+    	
+    	// mixed num
+    	if(a.contains("_")) {
+    		return a.substring(0, a.indexOf('_'));
+		
+		// just fraction
+    	} else if (a.contains("/")) {
+    		return "0";
+		
+		// just whole
+    	} else {
+    		return a;
+    	}
+    }
+    
+    // find the numerator
+    public static String num(String a) {
+    	
+    	// mixed num
+    	if(a.contains("_")) {
+    		return a.substring(a.indexOf('_') + 1, a.indexOf('/'));
+    		
+		// just fraction
+    	} else if (a.contains("/")) {
+    		return a.substring(0, a.indexOf('/')) ;
+		
+		// just whole
+    	} else {
+    		return "0";
+    	}
+    }
+    
+    // find the denominator
+    public static String denom(String a) {
 
-	public static void SetResult(int numerator, int denominator) {
-		if (numerator % denominator == 0) {
-			FracCalc.finalresult = Integer.toString(numerator / denominator);
-		} else {
-			// Simplify Fractions
-			int gcd = FracCalc.findGcd(numerator, denominator);
-			// Remove negative number on gcd (Get Absolute value)
-			if (Integer.toString(gcd).contains("-")) {
-				gcd = Integer.parseInt(Integer.toString(gcd).split("-")[1]);
-			}
-			int simplifiednumerator = numerator / gcd;
-			int simplifieddenominator = denominator / gcd;
-			// Convert back to Mixed Form
-			FracCalc.finalresult = turnImproperFractionToMixedFraction(simplifiednumerator, simplifieddenominator);
-		}
-	}
+		// fraction or mixed num
+    	if (a.contains("/")) {
+    		return a.substring(a.indexOf('/') + 1) ;
+		
+		// just whole
+    	} else {
+    		return "1";
+    	}
+    }
 
-	public static int findGcd(int number1, int number2) {
-		if (number2 == 0) {
-			return number1;
-		}
-		return findGcd(number2, number1 % number2);
-	}
+    /**
+     * greatestCommonDivisor - Find the largest integer that evenly divides two integers.
+     *      Use this helper method in the Final Checkpoint to reduce fractions.
+     *      Note: There is a different (recursive) implementation in BJP Chapter 12.
+     * @param a - First integer.
+     * @param b - Second integer.
+     * @return The GCD.
+     */
 
-	/**
-	 * greatestCommonDivisor - Find the largest integer that evenly divides two integers.
-	 *      Use this helper method in the Final Checkpoint to reduce fractions.
-	 *      Note: There is a different (recursive) implementation in BJP Chapter 12.
-	 * @param a - First integer.
-	 * @param b - Second integer.
-	 * @return The GCD.
-	 */
-
-	public static int greatestCommonDivisor(int a, int b) {
-		a = Math.abs(a);
-		b = Math.abs(b);
-		int max = Math.max(a, b);
-		int min = Math.min(a, b);
-		while (min != 0) {
-			int tmp = min;
-			min = max % min;
-			max = tmp;
-		}
-		return max;
-	}
-
-	/**
-	 * leastCommonMultiple - Find the smallest integer that can be evenly divided by two integers.
-	 *      Use this helper method in Checkpoint 3 to evaluate expressions.
-	 * @param a - First integer.
-	 * @param b - Second integer.
-	 * @return The LCM.
-	 */
-
-	public static int leastCommonMultiple(int a, int b) {
-		int gcd = greatestCommonDivisor(a, b);
-		return (a*b)/gcd;
-	}
-
-public static String turnImproperFractionToMixedFraction(int numerator, int denominator) {
-	Integer wholenumber = numerator / denominator;
-	Integer remainder = numerator % denominator;
-	// Check to see if the result is a negative result and remove the "-" char from
-	// the fraction and only show it in the whole number
-	if (wholenumber < 0)
-		// if (Integer.toString(remainder).contains("-"))
-	{
-		// Again Check to see if the remainder is negative
-		if (Integer.toString(remainder).contains("-")) {
-			remainder = Integer.parseInt(Integer.toString(remainder).split("-")[1]);
-		}
-	}
-	return wholenumber != 0 ? (wholenumber + "_" + remainder + "/" + denominator) : (remainder + "/" + denominator);
+    public static int greatestCommonDivisor(int a, int b)
+    {
+        a = Math.abs(a);
+        b = Math.abs(b);
+        int max = Math.max(a, b);
+        int min = Math.min(a, b);
+        while (min != 0) {
+            int tmp = min;
+            min = max % min;
+            max = tmp;
+        }
+        return max;
+    }
+    
+    /**
+     * leastCommonMultiple - Find the smallest integer that can be evenly divided by two integers.
+     *      Use this helper method in Checkpoint 3 to evaluate expressions.
+     * @param a - First integer.
+     * @param b - Second integer.
+     * @return The LCM.
+     */
+    
+    public static int leastCommonMultiple(int a, int b)
+    {
+        int gcd = greatestCommonDivisor(a, b);
+        return (a*b)/gcd;
+    }
 }
 
-// Calculations
-public static String Add() {
-	int tempnum = 0;
-	int commondenom = 0;
-	if (FracCalc.operand1Denom == FracCalc.operand2Denom) {
-		// Call Calculate Numerator based on operator
-		tempnum = FracCalc.operand1ImpNum + FracCalc.operand2ImpNum;
-		// Since the denominator are the same let's just use Operand1 denom
-		SetResult(tempnum, FracCalc.operand1Denom);
-	} else {
-		commondenom = FracCalc.operand1Denom * FracCalc.operand2Denom;
-		FracCalc.operand1ImpNum = FracCalc.operand1ImpNum
-				* (commondenom / FracCalc.operand1Denom);
-		FracCalc.operand2ImpNum = FracCalc.operand2ImpNum
-				* (commondenom / FracCalc.operand2Denom);
-		tempnum = FracCalc.operand1ImpNum + FracCalc.operand2ImpNum;
-		SetResult(tempnum, commondenom);
-	}
-	return FracCalc.finalresult;
-}
-
-public static String Multiply() {
-	int tempnumerator = 0;
-	int tempdenominator = 0;
-	tempnumerator = FracCalc.operand1ImpNum * FracCalc.operand2ImpNum;
-	tempdenominator = FracCalc.operand1Denom * FracCalc.operand2Denom;
-	SetResult(tempnumerator, tempdenominator);
-	return FracCalc.finalresult;
-}
-
-public static String Subract() {
-	int tempnum = 0;
-	int commondenom = 0;
-	if (FracCalc.operand1Denom == FracCalc.operand2Denom) {
-		// Call Calculate Numerator based on operator
-		tempnum = FracCalc.operand1ImpNum - FracCalc.operand2ImpNum;
-		// Since the denominator are the same let's just use Operand1 denom
-		SetResult(tempnum, FracCalc.operand1Denom);
-	} else {
-		commondenom = FracCalc.operand1Denom * FracCalc.operand2Denom;
-		FracCalc.operand1ImpNum = FracCalc.operand1ImpNum
-				* (commondenom / FracCalc.operand1Denom);
-		FracCalc.operand2ImpNum = FracCalc.operand2ImpNum
-				* (commondenom / FracCalc.operand2Denom);
-		tempnum = FracCalc.operand1ImpNum - FracCalc.operand2ImpNum;
-		SetResult(tempnum, commondenom);
-	}
-	return FracCalc.finalresult;
-}
-
-public static String Divide() {
-	int tempnum = 0;
-	int tempdenom = 0;
-	// Invert reciprocal of Operand 2
-	// Again Check to see if the remainder is negative
-	if (FracCalc.operand2ImpNum < 0) {
-		FracCalc.operand2ImpNum = Integer
-				.parseInt(Integer.toString(FracCalc.operand2ImpNum).split("-")[1]);
-		int tempvalue = FracCalc.operand2Denom;
-		FracCalc.operand2Denom = FracCalc.operand2ImpNum;
-		FracCalc.operand2ImpNum = tempvalue;
-		tempnum = (FracCalc.operand1ImpNum * -1) * FracCalc.operand2ImpNum;
-		tempdenom = FracCalc.operand1Denom * FracCalc.operand2Denom;
-	} else {
-		int tempvalue = FracCalc.operand2Denom;
-		FracCalc.operand2Denom = FracCalc.operand2ImpNum;
-		FracCalc.operand2ImpNum = tempvalue;
-		tempnum = FracCalc.operand1ImpNum * FracCalc.operand2ImpNum;
-		tempdenom = FracCalc.operand1Denom * FracCalc.operand2Denom;
-	}
-	SetResult(tempnum, tempdenom);
-	return FracCalc.finalresult;
-}
-}
+	
