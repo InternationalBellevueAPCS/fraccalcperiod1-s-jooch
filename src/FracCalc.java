@@ -36,6 +36,7 @@ public class FracCalc {
 		String equation = console.nextLine();
 
 		while (!equation.toLowerCase().equals("quit")) {
+			reset();
 			String results = produceAnswer(equation);
 			System.out.println(results);
 			reset();
@@ -169,11 +170,13 @@ public class FracCalc {
 			if (Math.abs(finalNum) > finalDenom) {
 				finalWhole = finalNum / finalDenom;
 				finalNum %= finalDenom;
-				if (finalNum <= 0) {
+				if (finalNum == 0) {
 					finalresult = finalWhole + "";
 				} else {
 					finalresult = finalWhole + "_" + finalNum + "/" + finalDenom;
 				}
+			} else if(finalNum == 0) {
+				finalresult = "0";
 			} else {
 				finalresult = finalNum + "/" + finalDenom;
 			}
