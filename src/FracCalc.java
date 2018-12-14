@@ -1,48 +1,31 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class FracCalc {
 
-	// Operand 1
-	public static int whole1; 
-	public static int num1;
-	public static int denom1;
-	public static int impNum1;
-
-	// Operand 2
-	public static int whole2;
-	public static int num2;
-	public static int denom2;
-	public static int impNum2;
-
-	// Operator & Results
-	public static String operator = "";
-	public static String finalresult = "";
-
-	// result of calling compute method
-	public static int resultNum;
-	public static int resultDenom;
-
-	// reduced stuff
-	public static int finalNum;
-	public static int finalDenom;
-	public static int finalWhole;
-
-	// boolean to check if improper fractions are being used
-	public static boolean improper = false;
-
 	public static void main(String[] args) {
-		Scanner console = new Scanner(System.in);
-		String equation = "";
-		do {
-			System.out.print("Enter an equation. Enter 'quit' to end. ");
-			equation = console.nextLine();
-			System.out.println(produceAnswer(equation));
-		} while (!equation.toLowerCase().equals("quit"));
+		Scanner console = new Scanner(System.in); 
+		
+		// to check if you should keep accepting equations
+		boolean running = true;
 
-		System.out.println("Bye!");
+		// to receive input
+		while (running) {
+			System.out.println("Enter a fraction equation. Please enter an equation with spaces. Enter 'quit' to end. ");
+			String input = console.nextLine();
+			
+			// Sentinel value = "quit"
+			if (input.toLowerCase().equals("quit")) {
+				running = false;
 
-	}	
+			} else {
+				
+				// prints answer
+				System.out.println(produceAnswer(input));
 
+			}
+		} 
+
+	}
 	// TODO: Implement this function to produce the solution to the input
 	// Checkpoint 1: Return the second operand.  Example "4/5 * 1_2/4" returns "1_2/4".
 	// Checkpoint 2: Return the second operand as a string representing each part.
@@ -54,206 +37,206 @@ public class FracCalc {
 	//               Example "4/5 * 1_2/4" returns "1_1/5".
 
 	public static String produceAnswer(String input) {
+		
+		// splits input into 1st operand, 2nd operand, and operator
+		String[] theInput = input.split(" ");
+		String first = theInput[0];
+		String op = theInput[1];
+		String second = theInput[2];
 
-		// check that the input is in the right format
+		// calls improper method to make the first and second operands improper fraction
+		String firstImproper = toImproper(first);
+		String secondImproper = toImproper(second);
 
-		if (input.length() < 3) {
-			return "ERROR: input in wrong format.";
+		String fullMixed = "";
 
-		} else {
-			// Split input into operand 1, operand 2, and the operator
-			String[] holder = input.split(" ");
-			String operand1 = holder[0];
-			String operation = holder[1];
-			String operand2 = holder[2];
+		// ADD
+		if (op.equals("+")) {
+			fullMixed += ((getNum(firstImproper) * getDen(secondImproper)) + (getNum(secondImproper) * getDen(firstImproper))) +  "/" + (getDen(firstImproper) * getDen(secondImproper));
 
-			// Use whole, num, and denom methods to convert operand1 and operand2
-			whole1 = whole(operand1);
-			num1 = num(operand1);
-			denom1 = denom(operand1);
-
-			whole2 = whole(operand2);
-			num2 = num(operand2);
-			denom2 = denom(operand2);
-
-			// Set operator field to operation found
-			operator = operation;
-
-			// if mixed number, change to improper fraction
-			if(whole1 != 0 && num1 != 0) {
-				num1 = mixedToImp(whole1, num1, denom1);
-			}
-
-			if(whole2 != 0 && num2 != 0) {
-				num2 = mixedToImp(whole2, num2, denom2);
-			}
-
-			// if whole number, change to fraction
-			if (num1 == 0) {
-				denom1 = denom2;
-				num1 = denom2 * whole1;
-			}
-
-			if (num2 == 0) {
-				denom2 = denom1;
-				num2 = denom1 * whole2;
-			}
-
-			// Compute
-			// + or - returns numerators, denominators computed within method but not returned (put into field newDenom)
-			if (operator.equals("+") || operator.equals("-")) {
-				resultNum = compute(num1, num2, operator);
-
-				// * or / returns numerator and denominator
-			} else if(operator.equals("*")) {
-				resultNum = compute(num1, num2, operator);
-				resultDenom = compute(denom1, denom2, operator);
-
-			} else if (operator.equals("/")) {
-				resultNum = compute(num1, denom2, operator);
-				resultDenom = compute(num2, denom1, operator);
-			}
-
-			// reduce the fractions
-			boolean real = true;
-
-			int gcd = greatestCommonDivisor(resultNum, resultDenom);
-			finalNum = resultNum / gcd;
-			finalDenom = resultDenom / gcd;
-
-			// whole number for mixed number
-			if (Math.abs(finalNum) > finalDenom) {
-				finalWhole = finalNum / finalDenom;
-				finalNum %= finalDenom;
-				if (finalNum == 0) {
-					finalresult = finalWhole + "";
-				} else {
-					finalresult = finalWhole + "_" + finalNum + "/" + finalDenom;
-				}
-			} else if(finalNum == 0) {
-				finalresult = "0";
-			} else {
-				finalresult = finalNum + "/" + finalDenom;
-			}
 		}
-		return finalresult;
+		
+		//SUBTRACT
+		else if (op.equals("-")) {
+			fullMixed += ((getNum(firstImproper) * getDen(secondImproper)) - (getNum(secondImproper) * getDen(firstImproper))) +  "/" + (getDen(firstImproper) * getDen(secondImproper));
+
+		}
+		
+		// MULTIPLY
+		else if (op.equals("*")) {
+			fullMixed += (getNum(firstImproper) * getNum(secondImproper)) + "/" + (getDen(firstImproper) * getDen(secondImproper));
+
+		}
+		
+		// DIVIDE
+		else if (op.equals("/")) {
+			fullMixed += (getNum(firstImproper) * getDen(secondImproper)) + "/" + (getDen(firstImproper) * getNum(secondImproper));
+
+		}
+		
+		// return answer after changing to mixed number
+		return toMixed(fullMixed); 
 	}
 
 	// TODO: Fill in the space below with helper methods
-
-	// find the whole number
-	public static int whole(String a) {
-
-		// mixed num
-		if(a.contains("_")) {
-			return Integer.parseInt(a.substring(0, a.indexOf('_')));
-
-			// just fraction
-		} else if (a.contains("/")) {
-			return Integer.parseInt("0");
-
-			// just whole
-		} else {
-			return Integer.parseInt(a);
+	
+	// method to convert improper fraction to most reduced and mixed form
+	public static String toMixed(String improper) {
+		
+		// gets numerator and denominator and looks for GCD
+		int num = getNum(improper);
+		int den = getDen(improper);
+		int divisor = greatestCommonDivisor(num, den);
+		
+		// checks if number is negative
+		boolean isNegative = false;
+		if (num < 0) {
+			isNegative = true;
+			num *= -1;
 		}
-	}
-
-	// find the numerator
-	public static int num(String a) {
-
-		// mixed num
-		if(a.contains("_")) {
-			return Integer.parseInt(a.substring(a.indexOf('_') + 1, a.indexOf('/')));
-
-			// just fraction
-		} else if (a.contains("/")) {
-			return Integer.parseInt(a.substring(0, a.indexOf('/')));
-
-			// just whole
-		} else {
-			return Integer.parseInt("0");
+		if (den < 0) {
+			if (isNegative) {
+				isNegative = false;
+				den *= -1;
+			} else {
+				isNegative = true;
+				den *= -1;
+			}         
 		}
-	}
 
-	// find the denominator
-	public static int denom(String a) {
+		// reduces the numerator and denominator
+		num = num/divisor;
+		den = den/divisor;
 
-		// fraction or mixed num
-		if (a.contains("/")) {
-			return Integer.parseInt(a.substring(a.indexOf('/') + 1));
-
-			// just whole
-		} else {
-			return Integer.parseInt("1");
+		if (num == 0) {
+			return "0";
 		}
-	}
-
-	// add, subtract, divide, and multiply
-	// add/subtract: enter numerators for a and b (because all numbers will be converted to fractions)
-	// multiply: enter both num and denom for a and b (call method twice w/ corresponding num and denom)
-	// divide: enter a as num1 and b as denom2 and vice versa (because for division you must multiply reciprocal of operand2)
-	// parameter sign = operator
-	public static int compute(int a, int b, String sign) {
-		int answer = 0;
-
-		// ADDITION
-		if(sign.equals("+")) {
-			if (improper) {
-				// multiply impNum by denom then add
-				answer = (a * denom2) + (b * denom1);
-
-				// don't add denominators, just change to new denominator
-				resultDenom = denom2 * denom1;
+		if (den == 1) {
+			if (isNegative) {
+				return "-" + num + "";
 
 			} else {
-				// multiply numerator by denominator then add
-				answer = (a * denom2) + (b * denom1);
-
-				// don't add denominators, just change to new denominator
-				resultDenom = denom2 * denom1;
+				return num + "";
 			}
 
-			//SUBTRACTION
-		} else if(sign.equals("-")) {
+		}
+				
+		// looks for how many times the denominator goes into the numerator
+		int counter = 0;
+		boolean running = true;
 
-			if (improper) {
-				// multiply impNum by denom then subtract
-				answer = (a * denom2) - (b * denom1);
+		if (num > 0) {    
+			counter = num / den;
+		}        
 
-				// don't subtract denominators, just change to new denominator
-				resultDenom = denom2 * denom1;
+		// looks for remainder
+		int remainder = num % den;
+
+		if (counter == 0) {
+			
+			if (isNegative) {
+				return "-" + num + "/" + den;
 			} else {
-				// multiply numerator by denominator then subtract
-				answer = (a * denom2) - (b * denom1);
-
-				// don't subtract denominators, just change to new denominator
-				resultDenom = denom2 * denom1;
+				return num + "/" + den;
 			}
 
-			// MULTIPLICATION & DIVISION (should enter different parameters, read instructions for method)
 		} else {
-			answer = a * b;
+			if (remainder == 0) {
+				if (isNegative) {
+					return "-" + counter + "";
+				} else {
+					return counter + "";
+				}
+			} 
+			else if (den == 1) {
+				if (isNegative) {
+					return "-" + counter + "_" + remainder;
+				} else {
+					return counter + "_" + remainder;
+				}
+
+			} else {
+				if (isNegative) {
+					return "-" + counter + "_" + remainder + "/" + den;
+				} else {
+					return counter + "_" + remainder + "/" + den;
+				}
+
+			}
 		}
 
-		return answer;
+	}
+	
+	// changes fraction to an improper fraction
+	public static String toImproper(String input) {
+		String whole = "";
+		String num = "";
+		String den = "";
+
+		if (input.contains("_")) {
+			String[] number = input.split("_");
+			whole = number[0];
+			num = number[1];
+
+		} else {
+			whole = "0";
+			num = input;
+
+		}
+
+		if (num.contains("/")) {
+			String[] number = num.split("/");
+			den = number[1];
+			num = number[0];
+
+		} else {
+			den = "1";
+
+		}
+		
+		// changes everything to an int
+		int wholeNum = Integer.parseInt(whole);
+		int numNum = Integer.parseInt(num);
+		int denNum = Integer.parseInt(den);
+
+		boolean isNegative = false;
+
+		// checks if number is negative
+		if (wholeNum < 0 || numNum < 0 || denNum <0) {
+			isNegative = true;
+
+		}
+		
+		// changes numerator to positive because need that to do operations
+		int newNum = ((Math.abs(wholeNum) * Math.abs(denNum)) + Math.abs(numNum));
+
+		String retString = newNum + "/" + den;
+
+		// changes back to negative if was originally negative to return into produceAnswer method
+		if (isNegative) {
+			return "-" + retString;
+		} else {
+			return retString;
+
+		}
+
+	}   
+
+	// find numerator
+	public static int getNum(String input) {
+
+		String[] split = input.split("/");
+		return Integer.parseInt(split[0]);
 
 	}
 
-	// convert mixed number to improper fraction
-	public static int mixedToImp(int w, int n, int d) {
-		int new_n = (d * w) + n;
-		//String imp = new_n + "/" + d;
-		return new_n;
-	}
+	// find denominator
+	public static int getDen(String input) {
 
-	/* convert improper fraction to mixed number
-	public static int impToMixed(int n, int d) {
-		int w = n % d;
-		int new_n = (n - (w * d));
-		//String mixed = w + "_" + new_n + "/" + d;
-		return new_n;
-	}
-	 */
+		String[] split = input.split("/");
+		return Integer.parseInt(split[1]);
+
+	}   
 
 	/**
 	 * greatestCommonDivisor - Find the largest integer that evenly divides two integers.
@@ -264,12 +247,12 @@ public class FracCalc {
 	 * @return The GCD.
 	 */
 
-	public static int greatestCommonDivisor(int a, int b)
-	{
+	public static int greatestCommonDivisor(int a, int b) {
 		a = Math.abs(a);
 		b = Math.abs(b);
 		int max = Math.max(a, b);
 		int min = Math.min(a, b);
+
 		while (min != 0) {
 			int tmp = min;
 			min = max % min;
@@ -286,9 +269,9 @@ public class FracCalc {
 	 * @return The LCM.
 	 */
 
-	public static int leastCommonMultiple(int a, int b)
-	{
+	public static int leastCommonMultiple(int a, int b) {
 		int gcd = greatestCommonDivisor(a, b);
 		return (a*b)/gcd;
 	}
+
 }
